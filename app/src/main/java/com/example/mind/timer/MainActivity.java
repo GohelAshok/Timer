@@ -5,10 +5,13 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     long timeInMillies = 0;
     long timeSwap = 0;
     long finalTime = 0;
+    float i;
+
 
 
     @Override
@@ -81,19 +86,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     });
                 }
             }, 1000, 1000);*/
-            startTime = SystemClock.uptimeMillis();
-            myHandler.postDelayed(updateTimerMethod, 0);
+
+
+           if (startTime==0)
+           {
+                   startTime = SystemClock.uptimeMillis();
+                   myHandler.postDelayed(updateTimerMethod, 0);
+           }
+           else {
+               startTime = SystemClock.uptimeMillis();
+               myHandler.postDelayed(updateTimerMethod, 0);
+           }
 
         }
         if (view==pause) {
             timeSwap += timeInMillies;
             myHandler.removeCallbacks(updateTimerMethod);
+            i=finalTime;
+            Log.e("i", String.valueOf(i));
 
         }
         if (view==reset)
         {
             myHandler.removeCallbacks(updateTimerMethod);
-            timer.setText("00:00:00");
+            timer.setText("00:00:000");
             startTime = 0;
             timeInMillies = 0;
             timeSwap = 0;
@@ -107,6 +123,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void run() {
             timeInMillies = SystemClock.uptimeMillis() - startTime;
             finalTime = timeSwap + timeInMillies;
+
+            Log.e("timemillies", String.valueOf(timeInMillies));
+            Log.e("finaltime", String.valueOf(timeInMillies));
+            Log.e("timeswap", String.valueOf(timeInMillies));
 
             int seconds = (int) (finalTime / 1000);
             int minutes = seconds / 60;
